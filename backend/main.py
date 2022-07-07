@@ -1,14 +1,19 @@
 from fastapi import FastAPI
-import par
+import Log_paser as log
 
 app = FastAPI()
 
 
 @app.get("/ping")
-def read_root():
+def ping():
     return "pong"
 
 
 @app.get("/ip")
 def ip():
-    return par.get_location()
+    return log.get_location()
+
+
+@app.get("/request")
+def request():
+    return log.get_request()
