@@ -1,13 +1,7 @@
-import re
-from jinja2 import pass_environment
-import pandas as pd
 from datetime import datetime
+import pandas as pd
 import pytz
-from mpl_toolkits.basemap import Basemap
-import numpy as np
-import matplotlib.pyplot as plt
 import requests
-import json
 
 
 def parse_str(x):
@@ -52,26 +46,25 @@ data = pd.read_csv(
                 'user_agent': parse_str})
 
 
-def get_ip():
+def get_location():
     result = []
     ip_list = list(data.ip)
+    request_headers = {
+        'User-Agent': ('Mozilla/5.0 (Windows NT 10.0;Win64; x64)\
+    AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98\
+    Safari/537.36'), }
     for i in ip_list:
-        print({"ip": i})
-        result.append(get_location({"ip": i}))
+        print(f'https://ipapi.co/{i}/json')
+        response = requests.get(
+            f'https://ipapi.co/{i}/json', headers=request_headers).json()
+        location_data = {
+            "ip": i,
+            "city": response.get("city"),
+            "region": response.get("region"),
+            "country": response.get("country_name"),
+            "postal": response.get("postal"),
+            "latitude": response.get("latitude"),
+        }
+        result.append(location_data)
+
     return result
-
-
-def get_location(ip_address):
-    ip_address = json.dumps(ip_address)
-    print(f'https://ipapi.co/{ip_address}/json')
-    response = requests.get(f'https://ipapi.co/{ip_address}/json').json()
-    print(response)
-    location_data = {
-        "ip": ip_address["ip"],
-        "city": response.get("city"),
-        "region": response.get("region"),
-        "country": response.get("country_name"),
-        "postal": response.get("postal"),
-        "latitude": response.get("latitude"),
-    }
-    return location_data

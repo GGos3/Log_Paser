@@ -12,4 +12,4 @@ def read_root():
 
 @app.get("/ip")
 def ip():
-    return par.get_ip()
+    return par.get_location()
