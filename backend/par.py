@@ -2,6 +2,7 @@ from datetime import datetime
 import pandas as pd
 import pytz
 import requests
+import glob
 
 
 def parse_str(x):
@@ -27,6 +28,7 @@ def parse_int(x):
     if x.isnumeric():
         return int(x)
     return x
+ # log_path =glob.glob("log_sample/access.*")
 
 
 data = pd.read_csv(
